@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="height_bottom_sheet">60dp</dimen>
+
+    <dimen name="main_thumbnail_radius">30dp</dimen>
+</resources>

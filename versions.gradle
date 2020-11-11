@@ -1,0 +1,7 @@
+ext {
+    kotlin_version = "1.4.10"
+
+    material_version = "1.2.1"
+
+    glide_version = "4.11.0"
+}

@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">sork-android</string>
+    <string name="app_name">쇽</string>
+
+    <string name="title_main_1">사이즈는 걱정말고,\n디자인만 보세요.</string>
+    <string name="enter_measure">치수 입력하기</string>
 </resources>

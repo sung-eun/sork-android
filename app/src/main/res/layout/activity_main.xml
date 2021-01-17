@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/white"
     tools:context=".main.MainActivity">
 
@@ -71,6 +72,24 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="@dimen/height_bottom_sheet"
+        android:paddingBottom="@dimen/padding_list_bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <View
+        android:id="@+id/bottom_sheet_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_40"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/bottom_sheet_binding"
+        layout="@layout/bottom_sheet_enter_measure"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_bottom_sheet_expanded"
+        app:behavior_draggable="true"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="@dimen/height_bottom_sheet_collapse"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

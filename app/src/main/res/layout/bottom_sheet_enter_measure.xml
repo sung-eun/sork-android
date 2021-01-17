@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet_binding"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_bottom_sheet_expanded"
+    android:background="@drawable/shape_rectangle_white_top_round_12"
+    app:behavior_draggable="true"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="@dimen/height_bottom_sheet_collapse"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <View
+        android:id="@+id/handle"
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shape_rectangle_77_radius_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/collapsed_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:paddingTop="14dp"
+        app:layout_constraintTop_toBottomOf="@+id/handle"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/collapsed_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/emoji_t_shirt"
+            app:layout_constraintEnd_toStartOf="@+id/collapsed_title"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/collapsed_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/message_enter_measure"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            app:layout_constraintBottom_toBottomOf="@id/collapsed_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/collapsed_icon"
+            app:layout_constraintTop_toTopOf="@+id/collapsed_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/expanded_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingStart="16dp"
+        android:paddingTop="41dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/handle"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/expanded_icon"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            android:src="@drawable/emoji_t_shirt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/expanded_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:includeFontPadding="false"
+            android:text="@string/label_enter_measure"
+            android:textColor="@color/black"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/expanded_icon"
+            app:layout_constraintStart_toEndOf="@+id/expanded_icon"
+            app:layout_constraintTop_toTopOf="@+id/expanded_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/measurement_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/negative_button"
+        app:layout_constraintTop_toBottomOf="@+id/expanded_title_layout"
+        app:layout_goneMarginTop="90dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/measurement_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/warning_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_warnning_red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/measurement_recycler_view" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/message_currently_support_tshirt"
+            android:textColor="@color/color_77"
+            android:textSize="14dp"
+            app:layout_constraintStart_toEndOf="@+id/warning_icon"
+            app:layout_constraintTop_toTopOf="@+id/warning_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/negative_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_dialog_button"
+        android:background="@color/color_f5"
+        android:gravity="center"
+        android:outlineProvider="none"
+        android:text="@string/cancel"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/positive_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/positive_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_dialog_button"
+        android:background="@color/black"
+        android:gravity="center"
+        android:outlineProvider="none"
+        android:text="@string/apply"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/negative_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

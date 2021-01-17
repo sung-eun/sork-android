@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/label_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_measurement_title"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="title" />
+
+        <Button
+            android:id="@+id/guide_button"
+            android:layout_width="54dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/shape_rectangle_white_radius_14_border_bb"
+            android:outlineProvider="none"
+            android:text="@string/measure_guide"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/title"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/label_cm"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="80" />
+
+        <TextView
+            android:id="@+id/label_cm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cm"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ruler_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@color/color_11"
+        app:layout_constraintTop_toBottomOf="@+id/label_layout" />
+
+    <View
+        android:id="@+id/ruler_center_view"
+        android:layout_width="3dp"
+        android:layout_height="72dp"
+        android:background="@color/green"
+        app:layout_constraintEnd_toEndOf="@id/ruler_recycler_view"
+        app:layout_constraintStart_toStartOf="@id/ruler_recycler_view"
+        app:layout_constraintTop_toTopOf="@id/ruler_recycler_view" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/ruler_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="ruler_recycler_view, ruler_center_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

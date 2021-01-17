@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="height_bottom_sheet">60dp</dimen>
+    <dimen name="padding_list_bottom">60dp</dimen>
+    <dimen name="height_bottom_sheet_collapse">66dp</dimen>
+    <dimen name="height_bottom_sheet_expanded">535dp</dimen>
+    <dimen name="height_dialog_button">56dp</dimen>
+    <dimen name="height_measurement_title">56dp</dimen>
 
     <dimen name="main_thumbnail_radius">30dp</dimen>
+
+    <dimen name="padding_division_small">5dp</dimen>
+    <dimen name="padding_division_default">9.5dp</dimen>
+    <dimen name="width_ruler_large_division">29dp</dimen>
 </resources>

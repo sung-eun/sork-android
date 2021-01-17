@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">쇽</string>
 
+    <!-- buttons -->
+    <string name="cancel">취소</string>
+    <string name="apply">적용</string>
+    <string name="measure_guide">재는법</string>
+
+    <string name="cm">cm</string>
+
     <string name="title_main_1">사이즈는 걱정말고,\n디자인만 보세요.</string>
     <string name="enter_measure">치수 입력하기</string>
+    <string name="message_enter_measure">치수를 입력해 주세요.</string>
+    <string name="label_enter_measure">치수 입력</string>
+    <string name="message_currently_support_tshirt">상품은 반팔 티셔츠만 제공되고 있습니다.<br />추후 넓혀 나아가도록 하겠습니다.</string>
 </resources>

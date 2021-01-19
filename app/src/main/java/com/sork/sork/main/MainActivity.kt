@@ -54,6 +54,19 @@ class MainActivity : AppCompatActivity() {
         val adapter = ProductAdapter()
         binding.recyclerView.adapter = adapter
 
+        adapter.submitList(
+            listOf(
+                ProductSummary(
+                    "01", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS2FVMRQC3Ww41MNAf6J_71nwEo-L6YR_9pbA&usqp=CAU",
+                    "MLB", "CHUNKY SHORT SLEEVE T-SHIRT NEW YORK YANKEES", 15000
+                ),
+                ProductSummary(
+                    "02", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS2FVMRQC3Ww41MNAf6J_71nwEo-L6YR_9pbA&usqp=CAU",
+                    "MLB", "[2] CHUNKY SHORT SLEEVE T-SHIRT NEW YORK YANKEES", 15000
+                )
+            )
+        )
+
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBinding.root)
         bottomSheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomsheet: View, newState: Int) {
@@ -72,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomSheetBinding.negativeButton.setOnClickListener { closeBottomSheet() }
         binding.bottomSheetBackground.setOnClickListener { closeBottomSheet() }
         binding.enterMeasureButton.setOnClickListener { openBottomSheet() }
+        binding.enterMeasureGuideText.setOnClickListener { openBottomSheet() }
 
         binding.bottomSheetBinding.positiveButton.setOnClickListener {
             closeBottomSheet(false)
@@ -109,6 +123,8 @@ class MainActivity : AppCompatActivity() {
     private fun setBottomSheetMeasurement(measurementParam: MeasurementParam) {
         val binding = binding ?: return
 
+        setTopHeaderStatus(measurementParam.hasSavedMeasurements)
+
         if (measurementParam.hasSavedMeasurements) {
             val stringBuilder = StringBuilder()
             measurementParam.measurements.forEach {
@@ -122,5 +138,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         bottomSheetMeasurementAdapter?.submitList(measurementParam.measurements)
+    }
+
+    private fun setTopHeaderStatus(hasSavedMeasurements: Boolean) {
+        val binding = binding ?: return
+        if (hasSavedMeasurements) {
+            binding.enterMeasureButton.visibility = View.GONE
+            binding.messageHasMeasurements.visibility = View.VISIBLE
+            binding.titleIcon.setImageResource(R.drawable.emoji_hand_attention)
+            binding.enterMeasureGuideText.visibility = View.INVISIBLE
+        } else {
+            binding.enterMeasureButton.visibility = View.VISIBLE
+            binding.messageHasMeasurements.visibility = View.GONE
+            binding.titleIcon.setImageResource(R.drawable.emoji_write)
+            binding.enterMeasureGuideText.visibility = View.VISIBLE
+        }
     }
 }

@@ -10,9 +10,11 @@
 
     <string name="title_main_1">사이즈는 걱정말고,\n디자인만 보세요.</string>
     <string name="enter_measure">치수 입력하기</string>
+    <string name="message_has_saved_measurement">최고의 상품만 제공하겠습니다.</string>
     <string name="message_enter_measure">치수를 입력해 주세요.</string>
     <string name="label_enter_measure">치수 입력</string>
     <string name="message_currently_support_tshirt">상품은 반팔 티셔츠만 제공되고 있습니다.\n추후 넓혀 나아가도록 하겠습니다.</string>
+    <string name="message_enter_measure_guid">아끼는 티셔츠의 치수를 입력하세요.</string>
 
     <string name="short_sleeves_measurement_summary">반팔티 :%s</string>
     <string name="shoulder_width">어깨너비</string>

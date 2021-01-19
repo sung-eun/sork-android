@@ -31,18 +31,19 @@
 
         <Button
             android:id="@+id/guide_button"
-            android:layout_width="54dp"
+            android:layout_width="52dp"
             android:layout_height="26dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/shape_rectangle_white_radius_14_border_bb"
+            android:background="@drawable/shape_rectangle_ea_radius_14"
             android:outlineProvider="none"
             android:text="@string/measure_guide"
             android:textColor="@color/black"
-            android:textSize="13dp"
+            android:textSize="12dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/title"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/value"

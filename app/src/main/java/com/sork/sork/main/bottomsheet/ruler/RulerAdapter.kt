@@ -1,7 +1,8 @@
-package com.sork.sork.ui.ruler
+package com.sork.sork.main.bottomsheet.ruler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.roundToInt
 
 class RulerAdapter(private val size: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
@@ -53,6 +54,11 @@ class RulerAdapter(private val size: Int) : RecyclerView.Adapter<RecyclerView.Vi
     fun getVirtualPosition(position: Int): Int {
         val positionExceptHeader = position - 1
         return positionExceptHeader - ((positionExceptHeader + 5) / 7) - ((positionExceptHeader + 2) / 7)
+    }
+
+    fun getPosition(virtualPosition: Int): Int {
+//        return virtualPosition + 1 + ((virtualPosition) / 5) * 2
+        return (virtualPosition.toDouble() * 7 / 5).roundToInt() + 1
     }
 
     override fun getItemCount(): Int {

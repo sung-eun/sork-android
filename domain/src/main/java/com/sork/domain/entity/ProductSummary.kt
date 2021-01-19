@@ -1,4 +1,4 @@
-package com.sork.domain
+package com.sork.domain.entity
 
 data class ProductSummary(
     val id: String,

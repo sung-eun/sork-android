@@ -1,4 +1,4 @@
-package com.sork.sork.ui.ruler
+package com.sork.sork.main.bottomsheet.ruler
 
 import android.content.Context
 import android.util.DisplayMetrics

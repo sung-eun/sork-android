@@ -12,5 +12,11 @@
     <string name="enter_measure">치수 입력하기</string>
     <string name="message_enter_measure">치수를 입력해 주세요.</string>
     <string name="label_enter_measure">치수 입력</string>
-    <string name="message_currently_support_tshirt">상품은 반팔 티셔츠만 제공되고 있습니다.<br />추후 넓혀 나아가도록 하겠습니다.</string>
+    <string name="message_currently_support_tshirt">상품은 반팔 티셔츠만 제공되고 있습니다.\n추후 넓혀 나아가도록 하겠습니다.</string>
+
+    <string name="short_sleeves_measurement_summary">반팔티 :%s</string>
+    <string name="shoulder_width">어깨너비</string>
+    <string name="sleeve_length">소매길이</string>
+    <string name="bust_width">가슴너비</string>
+    <string name="total_length">총기장</string>
 </resources>

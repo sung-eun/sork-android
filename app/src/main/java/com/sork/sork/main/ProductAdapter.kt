@@ -4,10 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sork.domain.ProductSummary
+import com.sork.domain.entity.ProductSummary
 
-class ProductAdapter : ListAdapter<ProductSummary, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<ProductSummary>() {
+class ProductAdapter : ListAdapter<ProductSummary, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<ProductSummary>() {
     override fun areItemsTheSame(oldItem: ProductSummary, newItem: ProductSummary): Boolean {
         return oldItem.id == newItem.id
     }

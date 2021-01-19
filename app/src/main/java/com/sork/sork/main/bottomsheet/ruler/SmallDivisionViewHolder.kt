@@ -1,4 +1,4 @@
-package com.sork.sork.ui.ruler
+package com.sork.sork.main.bottomsheet.ruler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

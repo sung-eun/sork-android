@@ -1,6 +1,7 @@
 package com.sork.sork.main.bottomsheet.measurement
 
 import android.content.Context
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -17,16 +18,12 @@ import com.sork.sork.ui.SnapOnScrollListener
 class MeasurementItemView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    interface MeasurementChangedListener {
-        fun onChanged(value: Int)
-    }
-
     private var binding: ViewMeasurementItemBinding? = null
 
     private lateinit var rulerAdapter: RulerAdapter
     private lateinit var snapHelper: LinearSnapHelper
 
-    var measurementChangedListener: MeasurementChangedListener? = null
+    private var measurement: Measurement? = null
 
     init {
         binding = ViewMeasurementItemBinding.inflate(LayoutInflater.from(context), this, true)
@@ -49,21 +46,27 @@ class MeasurementItemView @JvmOverloads constructor(
             binding.guideButton.visibility = if (focused) VISIBLE else GONE
 
             if (focused) {
-                val targetPosition = rulerAdapter.getPosition(binding.value.text.toString().toInt())
-                binding.rulerRecyclerView.scrollToPosition(targetPosition)
-                binding.rulerRecyclerView.post {
-                    binding.rulerRecyclerView.layoutManager?.let { layoutManager ->
-                        val snapDistance: IntArray = layoutManager.findViewByPosition(targetPosition)?.let {
-                            snapHelper.calculateDistanceToFinalSnap(
-                                layoutManager,
-                                it
-                            )
-                        } ?: return@let
+                val targetPosition = rulerAdapter.getPosition(measurement?.value?.toInt() ?: 0)
+                scrollRulerToPosition(targetPosition)
+            }
+        }
+    }
 
-                        if (snapDistance[0] != 0 || snapDistance[1] != 0) {
-                            binding.rulerRecyclerView.scrollBy(snapDistance[0], snapDistance[1])
-                        }
-                    }
+    private fun scrollRulerToPosition(position: Int) {
+        val binding = binding ?: return
+
+        binding.rulerRecyclerView.scrollToPosition(position)
+        binding.rulerRecyclerView.post {
+            binding.rulerRecyclerView.layoutManager?.let { layoutManager ->
+                val snapDistance: IntArray = layoutManager.findViewByPosition(position)?.let {
+                    snapHelper.calculateDistanceToFinalSnap(
+                        layoutManager,
+                        it
+                    )
+                } ?: return@let
+
+                if (snapDistance[0] != 0 || snapDistance[1] != 0) {
+                    binding.rulerRecyclerView.scrollBy(snapDistance[0], snapDistance[1])
                 }
             }
         }
@@ -93,33 +96,27 @@ class MeasurementItemView @JvmOverloads constructor(
                     }
 
                     val newValue: Int
-                    if (moveTargetPosition == -1) {
-                        newValue = rulerAdapter.getVirtualPosition(position)
+                    newValue = if (moveTargetPosition == -1) {
+                        rulerAdapter.getVirtualPosition(position)
                     } else {
-                        val snapDistance: IntArray = layoutManager.findViewByPosition(moveTargetPosition)?.let {
-                            snapHelper.calculateDistanceToFinalSnap(
-                                layoutManager,
-                                it
-                            )
-                        } ?: return
-
-                        if (snapDistance[0] != 0 || snapDistance[1] != 0) {
-                            binding.rulerRecyclerView.scrollBy(snapDistance[0], snapDistance[1])
-                        }
-
-                        newValue = rulerAdapter.getVirtualPosition(moveTargetPosition)
+                        scrollRulerToPosition(moveTargetPosition)
+                        rulerAdapter.getVirtualPosition(moveTargetPosition)
                     }
                     binding.value.text = newValue.toString()
-                    measurementChangedListener?.onChanged(newValue)
                 }
             })
         binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)
     }
 
     fun setMeasurement(measurement: Measurement) {
+        this.measurement = measurement
+
         val binding = binding ?: return
         binding.title.setText(getMeasurementTypeName(measurement.type))
-        binding.value.text = measurement.value.toString()
+
+        val valueString = measurement.value.toString().trimEnd('0').trimEnd('.')
+        binding.value.text = valueString
+
     }
 
     private fun getMeasurementTypeName(type: MeasurementType): Int {
@@ -128,6 +125,20 @@ class MeasurementItemView @JvmOverloads constructor(
             MeasurementType.SLEEVE_LENGTH -> R.string.sleeve_length
             MeasurementType.BUST_WIDTH -> R.string.bust_width
             MeasurementType.TOTAL_LENGTH -> R.string.total_length
+        }
+    }
+
+    fun getSelectedValue(): Double {
+        val binding = binding ?: return 0.0
+
+        if (TextUtils.isEmpty(binding.value.text)) {
+            return 0.0
+        }
+
+        return try {
+            binding.value.text.toString().toDouble()
+        } catch (e: NumberFormatException) {
+            0.0
         }
     }
 }

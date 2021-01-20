@@ -9,19 +9,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sork.data.datasource.MeasurementLocalDataSourceImpl
 import com.sork.data.repository.MeasurementRepositoryImpl
-import com.sork.domain.entity.ProductSummary
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
 import com.sork.sork.databinding.ActivityMainBinding
-import com.sork.sork.main.bottomsheet.measurement.MeasurementAdapter
 import com.sork.sork.main.model.MeasurementParam
 
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
-    private var bottomSheetMeasurementAdapter: MeasurementAdapter? = null
 
     private var viewModel: MainViewModel? = null
+    private var productAdapter: ProductAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,21 +49,8 @@ class MainActivity : AppCompatActivity() {
         val binding = binding ?: return
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = ProductAdapter()
-        binding.recyclerView.adapter = adapter
-
-        adapter.submitList(
-            listOf(
-                ProductSummary(
-                    "01", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS2FVMRQC3Ww41MNAf6J_71nwEo-L6YR_9pbA&usqp=CAU",
-                    "MLB", "CHUNKY SHORT SLEEVE T-SHIRT NEW YORK YANKEES", 15000
-                ),
-                ProductSummary(
-                    "02", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS2FVMRQC3Ww41MNAf6J_71nwEo-L6YR_9pbA&usqp=CAU",
-                    "MLB", "[2] CHUNKY SHORT SLEEVE T-SHIRT NEW YORK YANKEES", 15000
-                )
-            )
-        )
+        productAdapter = ProductAdapter()
+        binding.recyclerView.adapter = productAdapter
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBinding.root)
         bottomSheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -90,16 +75,11 @@ class MainActivity : AppCompatActivity() {
             closeBottomSheet(false)
             viewModel?.saveMeasurementInput()
         }
-
-        bottomSheetMeasurementAdapter = MeasurementAdapter(measurementChanged = { viewModel?.cacheMeasurementInput(it) })
-        binding.bottomSheetBinding.measurementRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.bottomSheetBinding.measurementRecyclerView.adapter = bottomSheetMeasurementAdapter
     }
 
     private fun openBottomSheet() {
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         setupBottomSheetView(true)
-        bottomSheetMeasurementAdapter?.notifyDataSetChanged()
     }
 
     private fun closeBottomSheet(clearCache: Boolean = true) {
@@ -136,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             binding.bottomSheetBinding.collapsedTitle.setText(R.string.message_enter_measure)
         }
 
-        bottomSheetMeasurementAdapter?.submitList(measurementParam.measurements)
+        binding.bottomSheetBinding.measurementListLayout.setMeasurements(measurementParam.measurements)
     }
 
     private fun setTopHeaderStatus(hasSavedMeasurements: Boolean) {

@@ -29,7 +29,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="54dp"
-                    android:lineSpacingExtra="1.5dp"
                     android:text="@string/title_main_1"
                     android:textColor="@color/black"
                     android:textSize="26dp"

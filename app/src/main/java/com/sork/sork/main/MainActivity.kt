@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomSheetBinding.negativeButton.setOnClickListener { closeBottomSheet() }
         binding.bottomSheetBackground.setOnClickListener { closeBottomSheet() }
         binding.enterMeasureButton.setOnClickListener { openBottomSheet() }
-        binding.enterMeasureGuideText.setOnClickListener { openBottomSheet() }
 
         binding.bottomSheetBinding.positiveButton.setOnClickListener {
             closeBottomSheet(false)
@@ -146,12 +145,10 @@ class MainActivity : AppCompatActivity() {
             binding.enterMeasureButton.visibility = View.GONE
             binding.messageHasMeasurements.visibility = View.VISIBLE
             binding.titleIcon.setImageResource(R.drawable.emoji_hand_attention)
-            binding.enterMeasureGuideText.visibility = View.INVISIBLE
         } else {
             binding.enterMeasureButton.visibility = View.VISIBLE
             binding.messageHasMeasurements.visibility = View.GONE
             binding.titleIcon.setImageResource(R.drawable.emoji_write)
-            binding.enterMeasureGuideText.visibility = View.VISIBLE
         }
     }
 }

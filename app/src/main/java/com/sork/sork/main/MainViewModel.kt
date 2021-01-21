@@ -8,15 +8,12 @@ import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.main.model.MeasurementParam
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
-import java.util.concurrent.CopyOnWriteArrayList
 
 class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewModel() {
     private val disposable = CompositeDisposable()
-    private var cachedMeasurements: CopyOnWriteArrayList<Measurement> = CopyOnWriteArrayList()
 
     val measurementParam: MutableLiveData<MeasurementParam> = MutableLiveData()
     val error: MutableLiveData<Throwable> = MutableLiveData()
@@ -32,7 +29,6 @@ class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewMo
                         Single.just(MeasurementParam(measurements, true))
                     }
                 }
-                .doOnSuccess { cachedMeasurements = CopyOnWriteArrayList(it.measurements) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = { measurementParam.value = it },
@@ -41,30 +37,9 @@ class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewMo
         )
     }
 
-    fun cacheMeasurementInput(measurement: Measurement) {
-        cachedMeasurements = CopyOnWriteArrayList(Observable.fromIterable(cachedMeasurements)
-            .map {
-                if (it.type == measurement.type) {
-                    it.copy(value = measurement.value)
-                } else {
-                    it
-                }
-            }
-            .toList()
-            .blockingGet())
-    }
-
-    fun clearInputCache() {
+    fun saveMeasurementInput(measurements: List<Measurement>) {
         disposable.add(
-            Completable.fromAction { cachedMeasurements.clear() }
-                .subscribe()
-        )
-    }
-
-    fun saveMeasurementInput() {
-        disposable.add(
-            Single.just(cachedMeasurements.toList())
-                .flatMapCompletable { measurementUseCase.setMeasurements(it) }
+            measurementUseCase.setMeasurements(measurements)
                 .andThen(Completable.fromAction { loadMeasurements() })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()

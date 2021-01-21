@@ -90,7 +90,7 @@ class MeasurementItemView @JvmOverloads constructor(
             SnapOnScrollListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
                     val positionExceptHeader = position - 1
-                    binding.value.text = (positionExceptHeader / 2.toDouble()).toString()
+                    binding.value.text = MeasurementUtil.getAdjustedValue(positionExceptHeader / 2.toDouble(), false)
                 }
             })
         binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)
@@ -101,8 +101,8 @@ class MeasurementItemView @JvmOverloads constructor(
 
         val binding = binding ?: return
         binding.title.setText(getMeasurementTypeName(measurement.type))
-        binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value)
-
+        binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value, false)
+        binding.checkbox.isChecked = measurement.selected
     }
 
     private fun getMeasurementTypeName(type: MeasurementType): Int {
@@ -114,7 +114,11 @@ class MeasurementItemView @JvmOverloads constructor(
         }
     }
 
-    fun getSelectedValue(): Double {
+    fun getMeasurement(): Measurement {
+        return measurement!!.copy(value = getSelectedValue(), selected = binding?.checkbox?.isChecked ?: false)
+    }
+
+    private fun getSelectedValue(): Double {
         val binding = binding ?: return 0.0
 
         if (TextUtils.isEmpty(binding.value.text)) {
@@ -126,5 +130,14 @@ class MeasurementItemView @JvmOverloads constructor(
         } catch (e: NumberFormatException) {
             0.0
         }
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        binding?.checkbox?.isEnabled = enabled
+    }
+
+    fun setChecked(checked: Boolean) {
+        binding?.checkbox?.isChecked = checked
     }
 }

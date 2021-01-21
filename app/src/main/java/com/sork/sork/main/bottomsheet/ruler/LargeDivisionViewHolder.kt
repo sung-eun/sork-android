@@ -14,6 +14,6 @@ class LargeDivisionViewHolder(private val binding: ItemRulerLargeBinding) : Recy
     }
 
     fun bind(value: Double) {
-        binding.number.text = MeasurementUtil.getAdjustedValue(value)
+        binding.number.text = MeasurementUtil.getAdjustedValue(value, true)
     }
 }

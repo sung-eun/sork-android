@@ -68,13 +68,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomSheetBinding.root.setOnClickListener { }
         binding.bottomSheetBinding.collapsedTitleLayout.setOnClickListener { openBottomSheet() }
-        binding.bottomSheetBinding.negativeButton.setOnClickListener { closeBottomSheet() }
         binding.bottomSheetBackground.setOnClickListener { closeBottomSheet() }
         binding.enterMeasureButton.setOnClickListener { openBottomSheet() }
 
+        binding.bottomSheetBinding.negativeButton.setOnClickListener {
+            closeBottomSheet()
+            viewModel?.measurementParam?.value?.let {
+                setBottomSheetMeasurement(it)
+            }
+        }
         binding.bottomSheetBinding.positiveButton.setOnClickListener {
-            closeBottomSheet(false)
-            viewModel?.saveMeasurementInput()
+            closeBottomSheet()
+            viewModel?.saveMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
         }
     }
 
@@ -83,12 +88,9 @@ class MainActivity : AppCompatActivity() {
         setupBottomSheetView(true)
     }
 
-    private fun closeBottomSheet(clearCache: Boolean = true) {
+    private fun closeBottomSheet() {
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         setupBottomSheetView(false)
-        if (clearCache) {
-            viewModel?.clearInputCache()
-        }
     }
 
     private fun setupBottomSheetView(expanded: Boolean) {
@@ -110,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             measurementParam.measurements.forEach {
                 stringBuilder
                     .append(' ')
-                    .append(MeasurementUtil.getAdjustedValue(it.value))
+                    .append(MeasurementUtil.getAdjustedValue(it.value, true))
             }
             binding.bottomSheetBinding.collapsedTitle.text = getString(R.string.short_sleeves_measurement_summary, stringBuilder.toString())
         } else {

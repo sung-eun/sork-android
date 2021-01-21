@@ -90,7 +90,7 @@ class MeasurementItemView @JvmOverloads constructor(
             SnapOnScrollListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
                     val positionExceptHeader = position - 1
-                    binding.value.text = MeasurementUtil.getAdjustedValue(positionExceptHeader / 2.toDouble())
+                    binding.value.text = (positionExceptHeader / 2.toDouble()).toString()
                 }
             })
         binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)

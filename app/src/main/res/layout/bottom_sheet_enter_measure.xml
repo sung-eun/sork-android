@@ -87,33 +87,30 @@
             app:layout_constraintTop_toTopOf="@+id/expanded_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/measurement_list_container"
+    <com.sork.sork.main.bottomsheet.measurement.MeasurementListLayout
+        android:id="@+id/measurement_list_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:minHeight="296dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/negative_button"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/label_select_measurement_guide"
         app:layout_constraintTop_toBottomOf="@+id/expanded_title_layout"
-        app:layout_goneMarginTop="90dp">
+        app:layout_goneMarginTop="90dp" />
 
-        <com.sork.sork.main.bottomsheet.measurement.MeasurementListLayout
-            android:id="@+id/measurement_list_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:gravity="center"
-            android:text="@string/guide_measurement_checkbox"
-            android:textColor="@color/color_77"
-            android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/label_select_measurement_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:paddingTop="35dp"
+        android:text="@string/guide_measurement_checkbox"
+        android:textColor="@color/color_77"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/negative_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/negative_button"

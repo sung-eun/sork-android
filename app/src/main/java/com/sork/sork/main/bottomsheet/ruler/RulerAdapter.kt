@@ -1,8 +1,10 @@
 package com.sork.sork.main.bottomsheet.ruler
 
+import android.graphics.Rect
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.math.roundToInt
+import com.sork.common.util.ViewUtil
 
 class RulerAdapter(private val size: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
@@ -24,11 +26,11 @@ class RulerAdapter(private val size: Int) : RecyclerView.Adapter<RecyclerView.Vi
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == TYPE_HEADER_FOOTER || holder.itemViewType == TYPE_EMPTY_SPACE) return
 
-        val virtualPosition = getVirtualPosition(position)
+        val positionExceptHeader = position - 1
+
+        val value = positionExceptHeader / 2.toDouble()
         if (holder is LargeDivisionViewHolder) {
-            holder.bind(virtualPosition)
-        } else if (holder is SmallDivisionViewHolder) {
-            holder.bind(virtualPosition)
+            holder.bind(value)
         }
     }
 
@@ -36,32 +38,46 @@ class RulerAdapter(private val size: Int) : RecyclerView.Adapter<RecyclerView.Vi
         if (position == 0 || position == itemCount - 1) {
             return TYPE_HEADER_FOOTER
         }
+
         val positionExceptHeader = position - 1
+        val value = positionExceptHeader / 2.toDouble()
 
-        if ((positionExceptHeader >= 2 && (positionExceptHeader + 5) % 7 == 0) ||
-            (positionExceptHeader >= 5 && (positionExceptHeader + 2) % 7 == 0)
-        ) {
+        if (value.toString().endsWith(".5")) {
             return TYPE_EMPTY_SPACE
-        }
-
-        val virtualPosition = getVirtualPosition(position)
-        if (virtualPosition % 5 == 0) {
+        } else if (value.toInt() % 5 == 0) {
             return TYPE_LARGE
         }
         return TYPE_SMALL
     }
 
-    fun getVirtualPosition(position: Int): Int {
-        val positionExceptHeader = position - 1
-        return positionExceptHeader - ((positionExceptHeader + 5) / 7) - ((positionExceptHeader + 2) / 7)
-    }
-
-    fun getPosition(virtualPosition: Int): Int {
-//        return virtualPosition + 1 + ((virtualPosition) / 5) * 2
-        return (virtualPosition.toDouble() * 7 / 5).roundToInt() + 1
+    fun getPosition(value: Double): Int {
+        return (value * 2).toInt() + 1
     }
 
     override fun getItemCount(): Int {
-        return size + 2 + (size / 5) * 2
+        return size * 2 + 2
+    }
+}
+
+class ItemPaddingDecoration : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        val position = parent.getChildAdapterPosition(view)
+        val lastPosition: Int? = parent.adapter?.let { it.itemCount - 1 }
+        if (position == 0 ||
+            (lastPosition != null && lastPosition == position)
+        ) return
+
+        val positionExceptHeader = position - 1
+        val value = positionExceptHeader / 2.toDouble()
+
+        if (positionExceptHeader == 0) {
+            outRect.set(0, 0, -ViewUtil.dpToPx(9.5), 0)
+        } else if (lastPosition != null && positionExceptHeader == lastPosition - 1) {
+            outRect.set(-ViewUtil.dpToPx(9.5), 0, 0, 0)
+        } else if (!value.toString().endsWith(".5") && value.toInt() % 5 == 0) {
+            outRect.set(-ViewUtil.dpToPx(9.5), 0, -ViewUtil.dpToPx(9.5), 0)
+        } else {
+            outRect.set(ViewUtil.dpToPx(4.0), 0, ViewUtil.dpToPx(4.0), 0)
+        }
     }
 }

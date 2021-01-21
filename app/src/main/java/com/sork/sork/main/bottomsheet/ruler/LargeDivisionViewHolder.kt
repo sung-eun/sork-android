@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sork.sork.databinding.ItemRulerLargeBinding
+import com.sork.sork.main.bottomsheet.MeasurementUtil
 
 class LargeDivisionViewHolder(private val binding: ItemRulerLargeBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {
@@ -12,7 +13,7 @@ class LargeDivisionViewHolder(private val binding: ItemRulerLargeBinding) : Recy
         }
     }
 
-    fun bind(value: Int) {
-        binding.number.text = value.toString()
+    fun bind(value: Double) {
+        binding.number.text = MeasurementUtil.getAdjustedValue(value)
     }
 }

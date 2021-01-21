@@ -11,6 +11,8 @@ import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
 import com.sork.sork.databinding.ViewMeasurementItemBinding
+import com.sork.sork.main.bottomsheet.MeasurementUtil
+import com.sork.sork.main.bottomsheet.ruler.ItemPaddingDecoration
 import com.sork.sork.main.bottomsheet.ruler.RulerAdapter
 import com.sork.sork.ui.OnSnapPositionChangeListener
 import com.sork.sork.ui.SnapOnScrollListener
@@ -45,8 +47,8 @@ class MeasurementItemView @JvmOverloads constructor(
             binding.rulerGroup.visibility = if (focused) VISIBLE else GONE
             binding.guideButton.visibility = if (focused) VISIBLE else GONE
 
-            if (focused) {
-                val targetPosition = rulerAdapter.getPosition(measurement?.value?.toInt() ?: 0)
+            if (focused && measurement != null) {
+                val targetPosition = rulerAdapter.getPosition(measurement!!.value)
                 scrollRulerToPosition(targetPosition)
             }
         }
@@ -79,6 +81,7 @@ class MeasurementItemView @JvmOverloads constructor(
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rulerRecyclerView.layoutManager = layoutManager
         binding.rulerRecyclerView.adapter = rulerAdapter
+        binding.rulerRecyclerView.addItemDecoration(ItemPaddingDecoration())
 
         snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.rulerRecyclerView)
@@ -87,22 +90,7 @@ class MeasurementItemView @JvmOverloads constructor(
             SnapOnScrollListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
                     val positionExceptHeader = position - 1
-                    var moveTargetPosition = -1
-
-                    if (positionExceptHeader >= 2 && (positionExceptHeader + 5) % 7 == 0) {
-                        moveTargetPosition = position - 1
-                    } else if (positionExceptHeader >= 5 && (positionExceptHeader + 2) % 7 == 0) {
-                        moveTargetPosition = position + 1
-                    }
-
-                    val newValue: Int
-                    newValue = if (moveTargetPosition == -1) {
-                        rulerAdapter.getVirtualPosition(position)
-                    } else {
-                        scrollRulerToPosition(moveTargetPosition)
-                        rulerAdapter.getVirtualPosition(moveTargetPosition)
-                    }
-                    binding.value.text = newValue.toString()
+                    binding.value.text = MeasurementUtil.getAdjustedValue(positionExceptHeader / 2.toDouble())
                 }
             })
         binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)
@@ -113,9 +101,7 @@ class MeasurementItemView @JvmOverloads constructor(
 
         val binding = binding ?: return
         binding.title.setText(getMeasurementTypeName(measurement.type))
-
-        val valueString = measurement.value.toString().trimEnd('0').trimEnd('.')
-        binding.value.text = valueString
+        binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value)
 
     }
 

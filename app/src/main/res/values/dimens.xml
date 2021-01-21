@@ -2,7 +2,7 @@
 <resources>
     <dimen name="padding_list_bottom">60dp</dimen>
     <dimen name="height_bottom_sheet_collapse">82dp</dimen>
-    <dimen name="height_bottom_sheet_expanded">535dp</dimen>
+    <dimen name="height_bottom_sheet_expanded">571dp</dimen>
     <dimen name="height_dialog_button">56dp</dimen>
     <dimen name="height_measurement_title">56dp</dimen>
 

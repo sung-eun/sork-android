@@ -12,6 +12,7 @@ import com.sork.data.repository.MeasurementRepositoryImpl
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
 import com.sork.sork.databinding.ActivityMainBinding
+import com.sork.sork.main.bottomsheet.MeasurementUtil
 import com.sork.sork.main.model.MeasurementParam
 
 class MainActivity : AppCompatActivity() {
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             measurementParam.measurements.forEach {
                 stringBuilder
                     .append(' ')
-                    .append(it.value)
+                    .append(MeasurementUtil.getAdjustedValue(it.value))
             }
             binding.bottomSheetBinding.collapsedTitle.text = getString(R.string.short_sleeves_measurement_summary, stringBuilder.toString())
         } else {

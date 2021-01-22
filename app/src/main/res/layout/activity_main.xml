@@ -104,4 +104,11 @@
         app:behavior_peekHeight="@dimen/height_bottom_sheet_collapse"
         app:layout_behavior="@string/bottom_sheet_behavior" />
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

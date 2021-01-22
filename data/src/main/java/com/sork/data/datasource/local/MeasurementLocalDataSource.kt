@@ -1,4 +1,4 @@
-package com.sork.data.datasource
+package com.sork.data.datasource.local
 
 import com.sork.domain.entity.Measurement
 import io.reactivex.rxjava3.core.Completable

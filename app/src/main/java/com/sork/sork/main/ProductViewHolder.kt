@@ -29,7 +29,7 @@ class ProductViewHolder(private val binding: ItemMainProductBinding) : RecyclerV
 
         binding.brandNameText.text = item.brandName
         binding.descriptionText.text = item.description
-        binding.priceText.text = item.price.toString()
+        binding.priceText.text = item.price
     }
 
 }

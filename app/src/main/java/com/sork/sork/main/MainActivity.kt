@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.sork.data.datasource.MeasurementLocalDataSourceImpl
+import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
+import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
+import com.sork.data.datasource.remote.api.ApiFactory
 import com.sork.data.repository.MeasurementRepositoryImpl
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
@@ -31,19 +33,48 @@ class MainActivity : AppCompatActivity() {
         initViewModel()
         initViews()
 
-        viewModel?.loadMeasurements()
+        viewModel?.loadInitialData()
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this, MainViewModelFactory(MeasurementUseCase(MeasurementRepositoryImpl(MeasurementLocalDataSourceImpl(this)))))
-            .get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            MainViewModelFactory(
+                MeasurementUseCase(
+                    MeasurementRepositoryImpl(
+                        MeasurementLocalDataSourceImpl(this),
+                        ProductSummaryRemoteDataSourceImpl(ApiFactory.getProductApi(this))
+                    )
+                )
+            )
+        ).get(MainViewModel::class.java)
 
         viewModel?.let {
+            it.productSummaries.observe(this, { productSummaries ->
+                if (productSummaries == null) return@observe
+                productAdapter?.submitList(productSummaries)
+            })
+
             it.measurementParam.observe(this, { measurementParam ->
                 if (measurementParam == null) return@observe
                 setBottomSheetMeasurement(measurementParam)
             })
+
+            it.loading.observe(this, { show ->
+                if (show == null) return@observe
+                setProgress(show)
+            })
+
+            it.error.observe(this, { throwable ->
+                if (throwable == null) return@observe
+                throwable.printStackTrace()
+            })
         }
+    }
+
+    private fun setProgress(visible: Boolean) {
+        val binding = binding ?: return
+        binding.progress.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     private fun initViews() {
@@ -79,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.bottomSheetBinding.positiveButton.setOnClickListener {
             closeBottomSheet()
-            viewModel?.saveMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
+            viewModel?.changeMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
         }
     }
 

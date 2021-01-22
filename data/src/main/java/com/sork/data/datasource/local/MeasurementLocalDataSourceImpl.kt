@@ -1,4 +1,4 @@
-package com.sork.data.datasource
+package com.sork.data.datasource.local
 
 import android.content.Context
 import com.google.gson.Gson

@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.itkacher.okhttpprofiler:okhttpprofiler:1.0.7'
 
     implementation project(':domain')
+    implementation project(path: ':common')
 }

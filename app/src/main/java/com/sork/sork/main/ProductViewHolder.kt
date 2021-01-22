@@ -10,18 +10,28 @@ import com.sork.domain.entity.ProductSummary
 import com.sork.sork.R
 import com.sork.sork.databinding.ItemMainProductBinding
 
-class ProductViewHolder(private val binding: ItemMainProductBinding) : RecyclerView.ViewHolder(binding.root) {
+class ProductViewHolder(private val binding: ItemMainProductBinding, private val onClickItem: (id: String) -> Unit = {}) :
+    RecyclerView.ViewHolder(binding.root) {
+
     companion object {
-        fun create(parent: ViewGroup): ProductViewHolder {
-            return ProductViewHolder(ItemMainProductBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        fun create(parent: ViewGroup, onClickItem: (id: String) -> Unit = {}): ProductViewHolder {
+            return ProductViewHolder(ItemMainProductBinding.inflate(LayoutInflater.from(parent.context), parent, false), onClickItem)
         }
+    }
+
+    init {
+        itemView.setOnClickListener { item?.let { onClickItem(it.id) } }
     }
 
     private val radius: Int by lazy {
         itemView.context.resources.getDimensionPixelSize(R.dimen.main_thumbnail_radius)
     }
 
+    private var item: ProductSummary? = null
+
     fun bind(item: ProductSummary) {
+        this.item = item
+
         Glide.with(itemView.context)
             .load(item.imageUrl)
             .transform(CenterCrop(), RoundedCorners(radius))

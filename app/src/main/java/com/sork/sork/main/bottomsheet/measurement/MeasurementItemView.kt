@@ -11,7 +11,7 @@ import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
 import com.sork.sork.databinding.ViewMeasurementItemBinding
-import com.sork.sork.main.bottomsheet.MeasurementUtil
+import com.sork.common.util.MeasurementUtil
 import com.sork.sork.main.bottomsheet.ruler.ItemPaddingDecoration
 import com.sork.sork.main.bottomsheet.ruler.RulerAdapter
 import com.sork.sork.ui.OnSnapPositionChangeListener

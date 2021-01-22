@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sork.sork.databinding.ItemRulerLargeBinding
-import com.sork.sork.main.bottomsheet.MeasurementUtil
+import com.sork.common.util.MeasurementUtil
 
 class LargeDivisionViewHolder(private val binding: ItemRulerLargeBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {

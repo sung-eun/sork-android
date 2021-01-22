@@ -14,7 +14,9 @@
     <color name="color_11">#111111</color>
     <color name="color_cc">#cccccc</color>
     <color name="color_ea">#eaeaea</color>
+    <color name="color_dd">#dddddd</color>
 
     <color name="green">#04c91f</color>
     <color name="light_red">#ffeeee</color>
+    <color name="red">#fa2828</color>
 </resources>

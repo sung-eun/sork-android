@@ -1,5 +1,6 @@
 package com.sork.sork.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,9 @@ import com.sork.data.repository.MeasurementRepositoryImpl
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
 import com.sork.sork.databinding.ActivityMainBinding
-import com.sork.sork.main.bottomsheet.MeasurementUtil
+import com.sork.sork.detail.DetailActivity
+import com.sork.sork.detail.EXTRA_ID
+import com.sork.common.util.MeasurementUtil
 import com.sork.sork.main.model.MeasurementParam
 
 class MainActivity : AppCompatActivity() {
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         val binding = binding ?: return
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter { id -> goDetail(id) }
         binding.recyclerView.adapter = productAdapter
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBinding.root)
@@ -164,5 +167,12 @@ class MainActivity : AppCompatActivity() {
             binding.messageHasMeasurements.visibility = View.GONE
             binding.titleIcon.setImageResource(R.drawable.emoji_write)
         }
+    }
+
+    private fun goDetail(id: String) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(EXTRA_ID, id)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP.or(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        startActivity(intent)
     }
 }

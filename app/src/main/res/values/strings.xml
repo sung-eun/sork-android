@@ -7,6 +7,7 @@
     <string name="measure_guide">재는법</string>
 
     <string name="cm">cm</string>
+    <string name="cm_with_value">%scm</string>
 
     <string name="title_main_1">사이즈는 걱정말고,\n디자인만 보세요.</string>
     <string name="enter_measure">치수 입력하기</string>
@@ -20,4 +21,15 @@
     <string name="sleeve_length">소매길이</string>
     <string name="bust_width">가슴너비</string>
     <string name="total_length">총기장</string>
+
+    <string name="detail_size_info">사이즈 정보</string>
+    <string name="detail_enter_measure_guide">치수를 입력하시면\n가장 유사한 사이즈를 찾아드립니다.</string>
+    <string name="legal_guide_about_size_recommendation">본 앱에서 제공되는 정보는 참고자료로만 제공된 것입니다.\n따라서, 앱에서 제공되는 모든 정보에 대해서\n법적으로 아무런 책임이나 의무를 부담하지 않습니다.</string>
+
+    <string name="label_suitable">딱 맞아요!</string>
+    <string name="label_lager_than">%scm 커요.</string>
+    <string name="label_smaller_than">%scm 작아요.</string>
+    <string name="label_none_value">정보 없음</string>
+    <string name="purchase_matched_size"><b>%s</b> 사이즈를 구매하세요.</string>
+    <string name="purchase_default">구매하러 가기</string>
 </resources>

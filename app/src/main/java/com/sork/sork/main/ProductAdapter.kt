@@ -6,17 +6,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sork.domain.entity.ProductSummary
 
-class ProductAdapter : ListAdapter<ProductSummary, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<ProductSummary>() {
-    override fun areItemsTheSame(oldItem: ProductSummary, newItem: ProductSummary): Boolean {
-        return oldItem.id == newItem.id
-    }
+class ProductAdapter(private val onClickItem: (id: String) -> Unit = {}) :
+    ListAdapter<ProductSummary, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<ProductSummary>() {
+        override fun areItemsTheSame(oldItem: ProductSummary, newItem: ProductSummary): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: ProductSummary, newItem: ProductSummary): Boolean {
-        return oldItem == newItem
-    }
-}) {
+        override fun areContentsTheSame(oldItem: ProductSummary, newItem: ProductSummary): Boolean {
+            return oldItem == newItem
+        }
+    }) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ProductViewHolder.create(parent)
+        return ProductViewHolder.create(parent, onClickItem)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

@@ -56,25 +56,6 @@ class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewMo
 
     }
 
-    fun loadMeasurements() {
-        disposable.add(
-            measurementUseCase.getMeasurements()
-                .flatMap { measurements ->
-                    if (measurements.isEmpty()) {
-                        measurementUseCase.getShortSleevesEmptyMeasurements()
-                            .map { MeasurementParam(it, false) }
-                    } else {
-                        Single.just(MeasurementParam(measurements, true))
-                    }
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = { measurementParam.value = it },
-                    onError = { error.value = it }
-                )
-        )
-    }
-
     fun changeMeasurementInput(measurements: List<Measurement>) {
         disposable.add(
             measurementUseCase.setMeasurements(measurements)

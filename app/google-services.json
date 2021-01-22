@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "331692318020",
+    "project_id": "sork-1ceb8",
+    "storage_bucket": "sork-1ceb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331692318020:android:4717281ea8b08e750acb11",
+        "android_client_info": {
+          "package_name": "com.sork.sork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331692318020-ji5qrgl3vc32qs9btdumln7v2o379d9l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxi8ZuXvwqd0GDoJAvbdaHkx9_OjMD4xY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331692318020-ji5qrgl3vc32qs9btdumln7v2o379d9l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

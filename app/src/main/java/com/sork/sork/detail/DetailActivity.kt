@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.sork.common.extension.setOnClickListenerWithHaptic
 import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
 import com.sork.data.datasource.remote.ProductDetailRemoteDataSourceImpl
@@ -113,11 +112,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun bindProduct(product: Product) {
         val binding = binding ?: return
-        binding.titleBrand.text = product.brandName
 
         Glide.with(this)
             .load(product.imageUrl)
-            .transform(CenterCrop(), RoundedCorners(resources.getDimensionPixelSize(R.dimen.main_thumbnail_radius)))
+            .transform(CenterCrop())
             .into(binding.thumbnail)
 
         binding.brandNameText.text = product.brandName

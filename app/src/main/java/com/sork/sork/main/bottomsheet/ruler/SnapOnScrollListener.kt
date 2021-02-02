@@ -1,4 +1,4 @@
-package com.sork.sork.ui
+package com.sork.sork.main.bottomsheet.ruler
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
@@ -25,6 +25,8 @@ class SnapOnScrollListener(
         NOTIFY_ON_SCROLL_STATE_IDLE
     }
 
+    private var lastNotifiedPosition: Int? = null
+
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         if (behavior == Behavior.NOTIFY_ON_SCROLL) {
             maybeNotifySnapPositionChange(recyclerView)
@@ -41,6 +43,9 @@ class SnapOnScrollListener(
 
     private fun maybeNotifySnapPositionChange(recyclerView: RecyclerView) {
         val snapPosition = snapHelper.getSnapPosition(recyclerView)
-        onSnapPositionChangeListener?.onSnapPositionChange(snapPosition)
+        if (lastNotifiedPosition == null || lastNotifiedPosition != snapPosition) {
+            onSnapPositionChangeListener?.onSnapPositionChange(snapPosition)
+        }
+        lastNotifiedPosition = snapPosition
     }
 }

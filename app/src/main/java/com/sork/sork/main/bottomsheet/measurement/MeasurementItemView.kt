@@ -3,6 +3,7 @@ package com.sork.sork.main.bottomsheet.measurement
 import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +15,9 @@ import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
 import com.sork.sork.databinding.ViewMeasurementItemBinding
 import com.sork.sork.main.bottomsheet.ruler.ItemPaddingDecoration
+import com.sork.sork.main.bottomsheet.ruler.OnSnapPositionChangeListener
 import com.sork.sork.main.bottomsheet.ruler.RulerAdapter
-import com.sork.sork.ui.OnSnapPositionChangeListener
-import com.sork.sork.ui.SnapOnScrollListener
+import com.sork.sork.main.bottomsheet.ruler.SnapOnScrollListener
 
 class MeasurementItemView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -49,7 +50,7 @@ class MeasurementItemView @JvmOverloads constructor(
             binding.guideButton.visibility = if (focused) VISIBLE else GONE
 
             if (focused && measurement != null) {
-                val targetPosition = rulerAdapter.getPosition(measurement!!.value)
+                val targetPosition = rulerAdapter.getPosition(getSelectedValue())
                 scrollRulerToPosition(targetPosition)
             }
         }
@@ -57,7 +58,7 @@ class MeasurementItemView @JvmOverloads constructor(
 
     private fun scrollRulerToPosition(position: Int) {
         val binding = binding ?: return
-
+        binding.value.isHapticFeedbackEnabled = false
         binding.rulerRecyclerView.scrollToPosition(position)
         binding.rulerRecyclerView.post {
             binding.rulerRecyclerView.layoutManager?.let { layoutManager ->
@@ -71,6 +72,7 @@ class MeasurementItemView @JvmOverloads constructor(
                 if (snapDistance[0] != 0 || snapDistance[1] != 0) {
                     binding.rulerRecyclerView.scrollBy(snapDistance[0], snapDistance[1])
                 }
+                binding.value.isHapticFeedbackEnabled = true
             }
         }
     }
@@ -87,16 +89,21 @@ class MeasurementItemView @JvmOverloads constructor(
         snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.rulerRecyclerView)
 
-        val snapOnScrollListener =
-            SnapOnScrollListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
+        val snapScrollListener =
+            SnapOnScrollListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL, object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
                     val positionExceptHeader = position - 1
                     val value = positionExceptHeader / 2.toDouble()
                     binding.value.text = MeasurementUtil.getAdjustedValue(value, false)
-                    binding.checkbox.isEnabled = value > 0.0
+                    binding.checkbox.isEnabled = value > 0
+                    if (value == 0.0) {
+                        binding.checkbox.isChecked = false
+                    }
+                    binding.value.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
                 }
             })
-        binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)
+
+        binding.rulerRecyclerView.addOnScrollListener(snapScrollListener)
     }
 
     fun setMeasurement(measurement: Measurement) {
@@ -105,7 +112,7 @@ class MeasurementItemView @JvmOverloads constructor(
         val binding = binding ?: return
         binding.title.setText(getMeasurementTypeName(measurement.type))
         binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value, false)
-        binding.checkbox.isChecked = measurement.selected
+        binding.checkbox.isChecked = measurement.selected && measurement.value > 0
         binding.checkbox.isEnabled = measurement.value > 0.0
     }
 

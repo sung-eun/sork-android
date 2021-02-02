@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.sork.common.extension.setOnClickListenerWithHaptic
+import com.sork.common.util.MeasurementUtil
 import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
 import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
 import com.sork.data.datasource.remote.api.ApiFactory
@@ -17,7 +19,6 @@ import com.sork.sork.R
 import com.sork.sork.databinding.ActivityMainBinding
 import com.sork.sork.detail.DetailActivity
 import com.sork.sork.detail.EXTRA_ID
-import com.sork.common.util.MeasurementUtil
 import com.sork.sork.main.model.MeasurementParam
 
 class MainActivity : AppCompatActivity() {
@@ -101,17 +102,17 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.bottomSheetBinding.root.setOnClickListener { }
-        binding.bottomSheetBinding.collapsedTitleLayout.setOnClickListener { openBottomSheet() }
-        binding.bottomSheetBackground.setOnClickListener { closeBottomSheet() }
-        binding.enterMeasureButton.setOnClickListener { openBottomSheet() }
+        binding.bottomSheetBinding.collapsedTitleLayout.setOnClickListenerWithHaptic { openBottomSheet() }
+        binding.bottomSheetBackground.setOnClickListenerWithHaptic { closeBottomSheet() }
+        binding.enterMeasureButton.setOnClickListenerWithHaptic { openBottomSheet() }
 
-        binding.bottomSheetBinding.negativeButton.setOnClickListener {
+        binding.bottomSheetBinding.negativeButton.setOnClickListenerWithHaptic {
             closeBottomSheet()
             viewModel?.measurementParam?.value?.let {
                 setBottomSheetMeasurement(it)
             }
         }
-        binding.bottomSheetBinding.positiveButton.setOnClickListener {
+        binding.bottomSheetBinding.positiveButton.setOnClickListenerWithHaptic {
             closeBottomSheet()
             viewModel?.changeMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
         }

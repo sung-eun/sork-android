@@ -6,6 +6,7 @@ import android.widget.CompoundButton
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.children
+import com.sork.common.extension.setOnClickListenerWithHaptic
 import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
@@ -66,6 +67,7 @@ class MeasurementListLayout @JvmOverloads constructor(
             val checkbox = itemView.findViewById<AppCompatCheckBox>(R.id.checkbox)
             checkbox.tag = it.type
             checkbox.setOnCheckedChangeListener(checkedChangedListener)
+            checkbox.setOnClickListenerWithHaptic { }
 
             if (it.selected) {
                 checkedMeasurementTypeSet.add(it.type)

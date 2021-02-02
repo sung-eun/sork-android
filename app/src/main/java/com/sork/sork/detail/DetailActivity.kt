@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.sork.common.extension.setOnClickListenerWithHaptic
 import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
 import com.sork.data.datasource.remote.ProductDetailRemoteDataSourceImpl
 import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
@@ -91,8 +92,8 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initViews() {
         val binding = binding ?: return
-        binding.backButton.setOnClickListener { onBackPressed() }
-        binding.purchaseButton.setOnClickListener {
+        binding.backButton.setOnClickListenerWithHaptic { onBackPressed() }
+        binding.purchaseButton.setOnClickListenerWithHaptic {
             viewModel?.product?.value?.let {
                 launchWebBrowser(it.purchaseUrl)
             }

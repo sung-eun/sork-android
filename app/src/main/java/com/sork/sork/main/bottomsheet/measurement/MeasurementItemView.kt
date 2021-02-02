@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.sork.common.extension.setOnClickListenerWithHaptic
 import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
@@ -36,7 +37,7 @@ class MeasurementItemView @JvmOverloads constructor(
 
     private fun initListeners() {
         val binding = binding ?: return
-        binding.labelLayout.setOnClickListener {
+        binding.labelLayout.setOnClickListenerWithHaptic {
             if (binding.title.isFocused) {
                 binding.title.clearFocus()
             } else {

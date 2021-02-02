@@ -1,7 +1,6 @@
 package com.sork.data.datasource.remote.api
 
 import android.content.Context
-import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.sork.data.R
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -15,11 +14,7 @@ object ApiFactory {
             .baseUrl(context.getString(R.string.api_base_url))
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.createWithScheduler(Schedulers.io()))
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(OkHttpProfilerInterceptor())
-                    .build()
-            )
+            .client(OkHttpClient())
             .build()
             .create(ProductApi::class.java)
     }

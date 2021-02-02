@@ -5,7 +5,6 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.sork.common.extension.setOnClickListenerWithHaptic
@@ -95,8 +94,6 @@ class MeasurementItemView @JvmOverloads constructor(
                     val value = positionExceptHeader / 2.toDouble()
                     binding.value.text = MeasurementUtil.getAdjustedValue(value, false)
                     binding.checkbox.isEnabled = value > 0.0
-
-                    Toast.makeText(context, value.toString(), Toast.LENGTH_SHORT).show()
                 }
             })
         binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)

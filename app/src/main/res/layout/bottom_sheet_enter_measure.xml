@@ -104,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:gravity="center"
+        android:lineSpacingExtra="3dp"
         android:paddingTop="35dp"
         android:text="@string/guide_measurement_checkbox"
         android:textColor="@color/color_77"

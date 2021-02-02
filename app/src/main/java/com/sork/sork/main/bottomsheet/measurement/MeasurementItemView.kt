@@ -5,14 +5,15 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.sork.common.extension.setOnClickListenerWithHaptic
+import com.sork.common.util.MeasurementUtil
 import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
 import com.sork.sork.databinding.ViewMeasurementItemBinding
-import com.sork.common.util.MeasurementUtil
 import com.sork.sork.main.bottomsheet.ruler.ItemPaddingDecoration
 import com.sork.sork.main.bottomsheet.ruler.RulerAdapter
 import com.sork.sork.ui.OnSnapPositionChangeListener
@@ -91,7 +92,11 @@ class MeasurementItemView @JvmOverloads constructor(
             SnapOnScrollListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
                     val positionExceptHeader = position - 1
-                    binding.value.text = MeasurementUtil.getAdjustedValue(positionExceptHeader / 2.toDouble(), false)
+                    val value = positionExceptHeader / 2.toDouble()
+                    binding.value.text = MeasurementUtil.getAdjustedValue(value, false)
+                    binding.checkbox.isEnabled = value > 0.0
+
+                    Toast.makeText(context, value.toString(), Toast.LENGTH_SHORT).show()
                 }
             })
         binding.rulerRecyclerView.addOnScrollListener(snapOnScrollListener)
@@ -104,6 +109,7 @@ class MeasurementItemView @JvmOverloads constructor(
         binding.title.setText(getMeasurementTypeName(measurement.type))
         binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value, false)
         binding.checkbox.isChecked = measurement.selected
+        binding.checkbox.isEnabled = measurement.value > 0.0
     }
 
     private fun getMeasurementTypeName(type: MeasurementType): Int {
@@ -119,7 +125,7 @@ class MeasurementItemView @JvmOverloads constructor(
         return measurement!!.copy(value = getSelectedValue(), selected = binding?.checkbox?.isChecked ?: false)
     }
 
-    private fun getSelectedValue(): Double {
+    fun getSelectedValue(): Double {
         val binding = binding ?: return 0.0
 
         if (TextUtils.isEmpty(binding.value.text)) {

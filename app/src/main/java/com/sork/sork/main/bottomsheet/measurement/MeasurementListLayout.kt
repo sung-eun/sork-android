@@ -51,7 +51,9 @@ class MeasurementListLayout @JvmOverloads constructor(
 
     private fun enableAllMeasurements() {
         children.iterator().forEach {
-            (it as? MeasurementItemView)?.isEnabled = true
+            (it as? MeasurementItemView)?.let { measurementItemView ->
+                measurementItemView.isEnabled = measurementItemView.getSelectedValue() > 0
+            }
         }
     }
 

@@ -92,7 +92,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initViews() {
         val binding = binding ?: return
-        binding.backButton.setOnClickListenerWithHaptic { onBackPressed() }
+        binding.backButton.setOnClickListenerWithHaptic { finish() }
         binding.purchaseButton.setOnClickListenerWithHaptic {
             viewModel?.product?.value?.let {
                 launchWebBrowser(it.purchaseUrl)
@@ -148,5 +148,10 @@ class DetailActivity : AppCompatActivity() {
         binding.detailSizeInfoBinding.matchedSizeText.text = product.matchedSize
         binding.purchaseButton.text = getString(R.string.purchase_matched_size, product.matchedSize)
         binding.detailSizeInfoBinding.root.visibility = View.VISIBLE
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
     }
 }

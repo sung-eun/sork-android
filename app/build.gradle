@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.sork.sork"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.0_2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

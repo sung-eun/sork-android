@@ -95,7 +95,7 @@ class MeasurementItemView @JvmOverloads constructor(
                     val positionExceptHeader = position - 1
                     val value = positionExceptHeader / 2.toDouble()
                     binding.value.text = MeasurementUtil.getAdjustedValue(value, false)
-                    binding.checkbox.isEnabled = value > 0
+                    binding.checkbox.isEnabled = value > 0 && isEnabled
                     if (value == 0.0) {
                         binding.checkbox.isChecked = false
                     }
@@ -113,7 +113,7 @@ class MeasurementItemView @JvmOverloads constructor(
         binding.title.setText(getMeasurementTypeName(measurement.type))
         binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value, false)
         binding.checkbox.isChecked = measurement.selected && measurement.value > 0
-        binding.checkbox.isEnabled = measurement.value > 0.0
+        binding.checkbox.isEnabled = measurement.value > 0.0 && isEnabled
     }
 
     private fun getMeasurementTypeName(type: MeasurementType): Int {

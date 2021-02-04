@@ -53,13 +53,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="20dp"
-        android:drawablePadding="2dp"
         android:gravity="center_vertical"
         android:includeFontPadding="false"
         android:textColor="@color/black"
         android:textSize="21dp"
         android:textStyle="bold"
-        app:drawableStartCompat="@drawable/ic_24_monetary_unit_kor"
         app:layout_constraintTop_toBottomOf="@+id/description_text"
         tools:text="26,000" />
 

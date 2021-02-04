@@ -7,18 +7,21 @@
 
     <TextView
         android:id="@+id/matched_size_text"
-        android:layout_width="48dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="7dp"
         android:background="@drawable/shape_rectangle_black_radius_3"
         android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:textColor="@color/white"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="XL" />
+        tools:text="XXL" />
 
     <LinearLayout
         android:id="@+id/title_layout"

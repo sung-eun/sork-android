@@ -150,6 +150,6 @@ class DetailActivity : AppCompatActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+        overridePendingTransition(0, R.anim.slide_to_right)
     }
 }

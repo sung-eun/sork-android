@@ -178,6 +178,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(EXTRA_ID, id)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP.or(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         startActivity(intent)
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+        overridePendingTransition(R.anim.slide_from_right, R.anim.anim_none)
     }
 }

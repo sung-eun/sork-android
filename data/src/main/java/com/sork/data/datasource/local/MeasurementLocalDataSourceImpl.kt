@@ -24,9 +24,24 @@ class MeasurementLocalDataSourceImpl(context: Context) : MeasurementLocalDataSou
 
     override fun setMeasurements(measurements: List<Measurement>): Completable {
         return Completable.fromCallable {
-            preferences.edit()
-                .putString(PREF_KEY_SHORT_SLEEVES_MEASUREMENTS, Gson().toJson(measurements))
-                .commit()
+            if (isInvalidMeasurements(measurements)) {
+                preferences.edit()
+                    .putString(PREF_KEY_SHORT_SLEEVES_MEASUREMENTS, "[]")
+                    .apply()
+            } else {
+                preferences.edit()
+                    .putString(PREF_KEY_SHORT_SLEEVES_MEASUREMENTS, Gson().toJson(measurements))
+                    .apply()
+            }
         }
+    }
+
+    private fun isInvalidMeasurements(measurements: List<Measurement>): Boolean {
+        measurements.forEach {
+            if (it.value > 0) {
+                return false
+            }
+        }
+        return true
     }
 }

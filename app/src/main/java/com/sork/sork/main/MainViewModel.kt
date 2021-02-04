@@ -30,7 +30,7 @@ class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewMo
                         measurementUseCase.getShortSleevesEmptyMeasurements()
                             .map { MeasurementParam(it, false) }
                     } else {
-                        Single.just(MeasurementParam(measurements, true))
+                        Single.just(MeasurementParam(measurements, hasValidMeasurements(measurements)))
                     }
                 }
                 .doOnSuccess { param -> measurementParam.postValue(param) }
@@ -53,7 +53,15 @@ class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewMo
                     }
                 )
         )
+    }
 
+    private fun hasValidMeasurements(measurements: List<Measurement>): Boolean {
+        measurements.forEach {
+            if (it.selected) {
+                return true
+            }
+        }
+        return false
     }
 
     fun changeMeasurementInput(measurements: List<Measurement>) {

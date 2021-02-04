@@ -49,6 +49,7 @@ class DetailViewModel(
     private fun getMeasurements() {
         disposable.add(
             measurementUseCase.getMeasurements()
+                .map { list -> if (hasValidMeasurements(list)) list else emptyList() }
                 .map { list -> list.map { it.type to it }.toMap() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -61,6 +62,15 @@ class DetailViewModel(
                     }
                 )
         )
+    }
+
+    private fun hasValidMeasurements(measurements: List<Measurement>): Boolean {
+        measurements.forEach {
+            if (it.selected) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun onCleared() {

@@ -129,7 +129,7 @@ class MeasurementItemView @JvmOverloads constructor(
         return measurement!!.copy(value = getSelectedValue(), selected = binding?.checkbox?.isChecked ?: false)
     }
 
-    fun getSelectedValue(): Double {
+    private fun getSelectedValue(): Double {
         val binding = binding ?: return 0.0
 
         if (TextUtils.isEmpty(binding.value.text)) {
@@ -145,10 +145,6 @@ class MeasurementItemView @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        binding?.checkbox?.isEnabled = enabled
-    }
-
-    fun setChecked(checked: Boolean) {
-        binding?.checkbox?.isChecked = checked
+        binding?.checkbox?.isEnabled = enabled && getSelectedValue() > 0
     }
 }

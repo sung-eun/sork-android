@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         viewModel?.let {
             it.productSummaries.observe(this, { productSummaries ->
                 if (productSummaries == null) return@observe
+                binding?.emptyText?.visibility = if (productSummaries.isEmpty()) View.VISIBLE else View.GONE
+                
                 productAdapter?.submitList(productSummaries) {
                     binding?.recyclerView?.scrollToPosition(0)
                     binding?.recyclerView?.postDelayed({ binding?.appbar?.setExpanded(true, false) }, 300)

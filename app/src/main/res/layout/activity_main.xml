@@ -89,6 +89,20 @@
         android:paddingBottom="@dimen/padding_list_bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <TextView
+        android:id="@+id/empty_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="345dp"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/empty_product_list"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:visibility="gone"
+        app:drawableTopCompat="@drawable/emoji_sad" />
+
     <View
         android:id="@+id/bottom_sheet_background"
         android:layout_width="match_parent"

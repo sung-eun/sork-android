@@ -141,4 +141,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/negative_button" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/button_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="negative_button, positive_button" />
+
+    <include
+        android:id="@+id/guide_binding"
+        layout="@layout/layout_size_measure_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

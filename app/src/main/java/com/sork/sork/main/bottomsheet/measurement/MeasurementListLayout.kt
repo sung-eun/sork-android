@@ -41,6 +41,8 @@ class MeasurementListLayout @JvmOverloads constructor(
         }
     }
 
+    var guideListener: GuideListener? = null
+
     private fun disableUnSelectedMeasurements() {
         children.iterator().forEach { view ->
             (view as? MeasurementItemView)?.let {
@@ -63,6 +65,7 @@ class MeasurementListLayout @JvmOverloads constructor(
 
         measurements.forEach {
             val itemView = MeasurementItemView(context)
+            itemView.guideListener = guideListener
             itemView.setMeasurement(it)
             itemView.tag = it.type
 

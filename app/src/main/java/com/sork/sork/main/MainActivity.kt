@@ -14,11 +14,13 @@ import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
 import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
 import com.sork.data.datasource.remote.api.ApiFactory
 import com.sork.data.repository.MeasurementRepositoryImpl
+import com.sork.domain.entity.MeasurementType
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
 import com.sork.sork.databinding.ActivityMainBinding
 import com.sork.sork.detail.DetailActivity
 import com.sork.sork.detail.EXTRA_ID
+import com.sork.sork.main.bottomsheet.measurement.GuideListener
 import com.sork.sork.main.model.MeasurementParam
 
 class MainActivity : AppCompatActivity() {
@@ -57,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             it.productSummaries.observe(this, { productSummaries ->
                 if (productSummaries == null) return@observe
                 binding?.emptyText?.visibility = if (productSummaries.isEmpty()) View.VISIBLE else View.GONE
-                
+
                 productAdapter?.submitList(productSummaries) {
                     binding?.recyclerView?.scrollToPosition(0)
                     binding?.recyclerView?.postDelayed({ binding?.appbar?.setExpanded(true, false) }, 300)
@@ -93,6 +95,12 @@ class MainActivity : AppCompatActivity() {
         productAdapter = ProductAdapter { id -> goDetail(id) }
         binding.recyclerView.adapter = productAdapter
 
+        initBottomSheet()
+    }
+
+    private fun initBottomSheet() {
+        val binding = binding ?: return
+
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetBinding.root)
         bottomSheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomsheet: View, newState: Int) {
@@ -108,18 +116,28 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomSheetBinding.root.setOnClickListener { }
         binding.bottomSheetBinding.collapsedTitleLayout.setOnClickListenerWithHaptic { openBottomSheet() }
-        binding.bottomSheetBackground.setOnClickListenerWithHaptic { closeBottomSheet() }
+        binding.bottomSheetBackground.setOnClickListenerWithHaptic { cancelEditMeasurement() }
         binding.enterMeasureButton.setOnClickListenerWithHaptic { openBottomSheet() }
 
-        binding.bottomSheetBinding.negativeButton.setOnClickListenerWithHaptic {
-            closeBottomSheet()
-            viewModel?.measurementParam?.value?.let {
-                setBottomSheetMeasurement(it)
-            }
-        }
+        binding.bottomSheetBinding.negativeButton.setOnClickListenerWithHaptic { cancelEditMeasurement() }
         binding.bottomSheetBinding.positiveButton.setOnClickListenerWithHaptic {
             closeBottomSheet()
             viewModel?.changeMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
+        }
+        binding.bottomSheetBinding.measurementListLayout.guideListener = object : GuideListener {
+            override fun onClickGuide(measurementType: MeasurementType) {
+                showSizeMeasureGuide(measurementType)
+            }
+        }
+        binding.bottomSheetBinding.guideBinding.guideConfirmButton.setOnClickListenerWithHaptic {
+            closeSizeMeasureGuide()
+        }
+    }
+
+    private fun cancelEditMeasurement() {
+        closeBottomSheet()
+        viewModel?.measurementParam?.value?.let {
+            setBottomSheetMeasurement(it)
         }
     }
 
@@ -129,6 +147,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun closeBottomSheet() {
+        closeSizeMeasureGuide()
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         setupBottomSheetView(false)
     }
@@ -162,6 +181,48 @@ class MainActivity : AppCompatActivity() {
         binding.bottomSheetBinding.measurementListLayout.setMeasurements(measurementParam.measurements)
     }
 
+    private fun showSizeMeasureGuide(measurementType: MeasurementType) {
+        val binding = binding ?: return
+        binding.bottomSheetBinding.guideBinding.guideTypeName.setText(getMeasurementTypeName(measurementType))
+        binding.bottomSheetBinding.guideBinding.guideDescription.setText(getMeasurementTypeDescription(measurementType))
+        binding.bottomSheetBinding.guideBinding.guideImage.setImageResource(getMeasurementTypeImage(measurementType))
+        binding.bottomSheetBinding.guideBinding.root.visibility = View.VISIBLE
+        binding.bottomSheetBinding.buttonGroup.visibility = View.GONE
+    }
+
+    private fun closeSizeMeasureGuide() {
+        val binding = binding ?: return
+        binding.bottomSheetBinding.guideBinding.root.visibility = View.GONE
+        binding.bottomSheetBinding.buttonGroup.visibility = View.VISIBLE
+    }
+
+    private fun getMeasurementTypeName(type: MeasurementType): Int {
+        return when (type) {
+            MeasurementType.SHOULDER_WIDTH -> R.string.shoulder_width
+            MeasurementType.SLEEVE_LENGTH -> R.string.sleeve_length
+            MeasurementType.BUST_WIDTH -> R.string.bust_width
+            MeasurementType.TOTAL_LENGTH -> R.string.total_length
+        }
+    }
+
+    private fun getMeasurementTypeDescription(type: MeasurementType): Int {
+        return when (type) {
+            MeasurementType.SHOULDER_WIDTH -> R.string.description_shoulder_width
+            MeasurementType.SLEEVE_LENGTH -> R.string.description_sleeve_length
+            MeasurementType.BUST_WIDTH -> R.string.description_bust_width
+            MeasurementType.TOTAL_LENGTH -> R.string.description_total_length
+        }
+    }
+
+    private fun getMeasurementTypeImage(type: MeasurementType): Int {
+        return when (type) {
+            MeasurementType.SHOULDER_WIDTH -> R.drawable.img_sample_tshirt_shoulder
+            MeasurementType.SLEEVE_LENGTH -> R.drawable.img_sample_tshirt_arm
+            MeasurementType.BUST_WIDTH -> R.drawable.img_sample_tshirt_chest
+            MeasurementType.TOTAL_LENGTH -> R.drawable.img_sample_tshirt_length
+        }
+    }
+
     private fun setTopHeaderStatus(hasSavedMeasurements: Boolean) {
         val binding = binding ?: return
         if (hasSavedMeasurements) {
@@ -181,5 +242,21 @@ class MainActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP.or(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         startActivity(intent)
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+    }
+
+    override fun onBackPressed() {
+        if (binding != null) {
+            binding?.let { binding ->
+                if (binding.bottomSheetBinding.guideBinding.root.visibility == View.VISIBLE) {
+                    closeSizeMeasureGuide()
+                    return
+                }
+            }
+        }
+        if (bottomSheetBehavior != null && bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
+            cancelEditMeasurement()
+            return
+        }
+        super.onBackPressed()
     }
 }

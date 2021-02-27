@@ -5,6 +5,7 @@
     <string name="cancel">취소</string>
     <string name="apply">적용</string>
     <string name="measure_guide">재는법</string>
+    <string name="confirm">확인</string>
 
     <string name="cm">cm</string>
     <string name="cm_with_value">%scm</string>
@@ -22,6 +23,10 @@
     <string name="sleeve_length">소매길이</string>
     <string name="bust_width">가슴너비</string>
     <string name="total_length">총기장</string>
+    <string name="description_shoulder_width">양 어깨의 봉제선부터 반대편까지</string>
+    <string name="description_sleeve_length">어깨의 봉제선부터 소매 밑단까지</string>
+    <string name="description_bust_width">겨드랑이 밑 봉제선부터 반대편 까지</string>
+    <string name="description_total_length">목 뒤 정중앙부터 밑단까지</string>
 
     <string name="detail_size_info">사이즈 정보</string>
     <string name="detail_enter_measure_guide">치수 입력 후 검색할 대상을 선택하세요.\n검색 대상은 최대 2개까지 선택할 수 있습니다.</string>

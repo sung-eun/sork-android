@@ -19,6 +19,10 @@ import com.sork.sork.main.bottomsheet.ruler.OnSnapPositionChangeListener
 import com.sork.sork.main.bottomsheet.ruler.RulerAdapter
 import com.sork.sork.main.bottomsheet.ruler.SnapOnScrollListener
 
+interface GuideListener {
+    fun onClickGuide(measurementType: MeasurementType)
+}
+
 class MeasurementItemView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
@@ -28,6 +32,8 @@ class MeasurementItemView @JvmOverloads constructor(
     private lateinit var snapHelper: LinearSnapHelper
 
     private var measurement: Measurement? = null
+
+    var guideListener: GuideListener? = null
 
     init {
         binding = ViewMeasurementItemBinding.inflate(LayoutInflater.from(context), this, true)
@@ -53,6 +59,10 @@ class MeasurementItemView @JvmOverloads constructor(
                 val targetPosition = rulerAdapter.getPosition(getSelectedValue())
                 scrollRulerToPosition(targetPosition)
             }
+        }
+        binding.guideButton.setOnClickListenerWithHaptic {
+            if (measurement == null) return@setOnClickListenerWithHaptic
+            guideListener?.onClickGuide(measurement!!.type)
         }
     }
 

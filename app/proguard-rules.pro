@@ -14,8 +14,38 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepattributes Signature
+-keepattributes Exceptions
+
+-keep class com.sork.domain.entity.** { *; }
+-keep class com.sork.data.model.** { *; }
+
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep class * extends com.bumptech.glide.module.AppGlideModule {
+ <init>(...);
+}
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+-keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
+  *** rewind();
+}
+
+-keep class com.google.android.material.** { *; }
+
+-dontwarn com.google.android.material.**
+-dontnote com.google.android.material.**
+
+-dontwarn androidx.**
+-keep class androidx.** { *; }
+-keep interface androidx.** { *; }

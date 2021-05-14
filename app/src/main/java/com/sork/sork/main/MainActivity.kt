@@ -15,6 +15,7 @@ import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
 import com.sork.data.datasource.remote.api.ApiFactory
 import com.sork.data.repository.MeasurementRepositoryImpl
 import com.sork.domain.entity.MeasurementType
+import com.sork.domain.entity.ProductSummary
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
 import com.sork.sork.databinding.ActivityMainBinding
@@ -27,8 +28,8 @@ class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
-    private var viewModel: MainViewModel? = null
-    private var productAdapter: ProductAdapter? = null
+    private lateinit var viewModel: MainViewModel
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         initViewModel()
         initViews()
 
-        viewModel?.loadInitialData()
+        viewModel.loadInitialData()
     }
 
     private fun initViewModel() {
@@ -55,37 +56,10 @@ class MainActivity : AppCompatActivity() {
             )
         ).get(MainViewModel::class.java)
 
-        viewModel?.let {
-            it.productSummaries.observe(this, { productSummaries ->
-                if (productSummaries == null) return@observe
-                binding?.emptyText?.visibility = if (productSummaries.isEmpty()) View.VISIBLE else View.GONE
-
-                productAdapter?.submitList(productSummaries) {
-                    binding?.recyclerView?.scrollToPosition(0)
-                    binding?.recyclerView?.postDelayed({ binding?.appbar?.setExpanded(true, false) }, 300)
-                }
-            })
-
-            it.measurementParam.observe(this, { measurementParam ->
-                if (measurementParam == null) return@observe
-                setBottomSheetMeasurement(measurementParam)
-            })
-
-            it.loading.observe(this, { show ->
-                if (show == null) return@observe
-                setProgress(show)
-            })
-
-            it.error.observe(this, { throwable ->
-                if (throwable == null) return@observe
-                throwable.printStackTrace()
-            })
-        }
-    }
-
-    private fun setProgress(visible: Boolean) {
-        val binding = binding ?: return
-        binding.progress.visibility = if (visible) View.VISIBLE else View.GONE
+        viewModel.productSummaries.observe(this, { updateProductSummaries(it) })
+        viewModel.measurementParam.observe(this, { setBottomSheetMeasurement(it) })
+        viewModel.loading.observe(this, { setProgress(it) })
+        viewModel.error.observe(this, {/*Currently, do nothing*/ })
     }
 
     private fun initViews() {
@@ -122,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomSheetBinding.negativeButton.setOnClickListenerWithHaptic { cancelEditMeasurement() }
         binding.bottomSheetBinding.positiveButton.setOnClickListenerWithHaptic {
             closeBottomSheet()
-            viewModel?.changeMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
+            viewModel.changeMeasurementInput(binding.bottomSheetBinding.measurementListLayout.getMeasurements())
         }
         binding.bottomSheetBinding.measurementListLayout.guideListener = object : GuideListener {
             override fun onClickGuide(measurementType: MeasurementType) {
@@ -134,11 +108,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setProgress(visible: Boolean) {
+        val binding = binding ?: return
+        binding.progress.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun updateProductSummaries(productSummaries: List<ProductSummary>) {
+        val binding = binding ?: return
+
+        binding.emptyText.visibility = if (productSummaries.isEmpty()) View.VISIBLE else View.GONE
+
+        productAdapter.submitList(productSummaries) {
+            binding.recyclerView.scrollToPosition(0)
+            binding.recyclerView.postDelayed({
+                binding.appbar.setExpanded(true, false)
+            }, 300)
+        }
+    }
+
+
     private fun cancelEditMeasurement() {
         closeBottomSheet()
-        viewModel?.measurementParam?.value?.let {
-            setBottomSheetMeasurement(it)
-        }
+        setBottomSheetMeasurement(viewModel.measurementParam.value)
     }
 
     private fun openBottomSheet() {
@@ -161,7 +152,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setBottomSheetMeasurement(measurementParam: MeasurementParam) {
+    private fun setBottomSheetMeasurement(measurementParam: MeasurementParam?) {
+        if (measurementParam == null) return
+
         val binding = binding ?: return
 
         setTopHeaderStatus(measurementParam.hasSavedMeasurements)
@@ -245,13 +238,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (binding != null) {
-            binding?.let { binding ->
-                if (binding.bottomSheetBinding.guideBinding.root.visibility == View.VISIBLE) {
-                    closeSizeMeasureGuide()
-                    return
-                }
-            }
+        if (binding != null && binding!!.bottomSheetBinding.guideBinding.root.visibility == View.VISIBLE) {
+            closeSizeMeasureGuide()
+            return
         }
         if (bottomSheetBehavior != null && bottomSheetBehavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
             cancelEditMeasurement()

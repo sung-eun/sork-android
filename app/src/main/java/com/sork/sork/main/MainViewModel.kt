@@ -17,8 +17,8 @@ class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewMo
     private val disposable = CompositeDisposable()
 
     val measurementParam: MutableLiveData<MeasurementParam> = MutableLiveData()
-    val productSummaries: MutableLiveData<List<ProductSummary>> = MutableLiveData()
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
+    val productSummaries: MutableLiveData<List<ProductSummary>> = MutableLiveData(emptyList())
+    val loading: MutableLiveData<Boolean> = MutableLiveData(false)
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
     fun loadInitialData() {

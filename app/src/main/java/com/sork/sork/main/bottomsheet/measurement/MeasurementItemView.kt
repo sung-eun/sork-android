@@ -1,7 +1,6 @@
 package com.sork.sork.main.bottomsheet.measurement
 
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
@@ -23,9 +22,12 @@ interface GuideListener {
     fun onClickGuide(measurementType: MeasurementType)
 }
 
+private const val RULER_SIZE = 121
+
 class MeasurementItemView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
     private var binding: ViewMeasurementItemBinding? = null
 
     private lateinit var rulerAdapter: RulerAdapter
@@ -90,7 +92,7 @@ class MeasurementItemView @JvmOverloads constructor(
     private fun initRecyclerView() {
         val binding = binding ?: return
 
-        rulerAdapter = RulerAdapter(121)
+        rulerAdapter = RulerAdapter(RULER_SIZE)
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rulerRecyclerView.layoutManager = layoutManager
         binding.rulerRecyclerView.adapter = rulerAdapter
@@ -120,6 +122,7 @@ class MeasurementItemView @JvmOverloads constructor(
         this.measurement = measurement
 
         val binding = binding ?: return
+
         binding.title.setText(getMeasurementTypeName(measurement.type))
         binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value, false)
         binding.checkbox.isChecked = measurement.selected && measurement.value > 0
@@ -132,16 +135,8 @@ class MeasurementItemView @JvmOverloads constructor(
 
     private fun getSelectedValue(): Double {
         val binding = binding ?: return 0.0
-
-        if (TextUtils.isEmpty(binding.value.text)) {
-            return 0.0
-        }
-
-        return try {
-            binding.value.text.toString().toDouble()
-        } catch (e: NumberFormatException) {
-            0.0
-        }
+        val text = binding.value.text
+        return text?.toString()?.toDoubleOrNull() ?: 0.0
     }
 
     override fun setEnabled(enabled: Boolean) {

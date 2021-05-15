@@ -24,7 +24,13 @@ object ProductMapper {
     }
 
     private fun mapToProductSummary(response: ResponseProductSummary): ProductSummary {
-        return ProductSummary(response.id, response.imageUrl ?: "", response.brand ?: "", response.name ?: "", getFormattedPrice(response.price))
+        return ProductSummary(
+            response.id,
+            response.imageUrl ?: "",
+            response.brand ?: "",
+            response.name ?: "",
+            getFormattedPrice(response.price)
+        )
     }
 
     fun mapToProduct(id: String, response: ResponseProduct): Product {
@@ -59,13 +65,6 @@ object ProductMapper {
     }
 
     private fun stringToDouble(value: String?): Double {
-        if (value == null) {
-            return 0.0
-        }
-        return try {
-            value.toDouble()
-        } catch (e: java.lang.NumberFormatException) {
-            0.0
-        }
+        return value?.toDoubleOrNull() ?: 0.0
     }
 }

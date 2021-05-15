@@ -44,7 +44,7 @@ class MeasurementListLayout @JvmOverloads constructor(
     var guideListener: GuideListener? = null
 
     private fun disableUnSelectedMeasurements() {
-        children.iterator().forEach { view ->
+        children.forEach { view ->
             (view as? MeasurementItemView)?.let {
                 it.isEnabled = checkedMeasurementTypeSet.contains(it.tag)
             }
@@ -52,7 +52,7 @@ class MeasurementListLayout @JvmOverloads constructor(
     }
 
     private fun enableAllMeasurements() {
-        children.iterator().forEach {
+        children.forEach {
             (it as? MeasurementItemView)?.let { measurementItemView ->
                 measurementItemView.isEnabled = true
             }

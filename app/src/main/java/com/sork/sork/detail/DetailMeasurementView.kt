@@ -7,13 +7,14 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.sork.common.util.MeasurementUtil
 import com.sork.domain.entity.DetailSize
-import com.sork.domain.entity.MeasurementType
 import com.sork.sork.R
+import com.sork.sork.common.getMeasurementTypeName
 import com.sork.sork.databinding.ViewDetailMeasurementItemBinding
 
 class DetailMeasurementView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
     private var binding: ViewDetailMeasurementItemBinding? = null
 
     init {
@@ -33,15 +34,6 @@ class DetailMeasurementView @JvmOverloads constructor(
         }
     }
 
-    private fun getMeasurementTypeName(type: MeasurementType): Int {
-        return when (type) {
-            MeasurementType.SHOULDER_WIDTH -> R.string.shoulder_width
-            MeasurementType.SLEEVE_LENGTH -> R.string.sleeve_length
-            MeasurementType.BUST_WIDTH -> R.string.bust_width
-            MeasurementType.TOTAL_LENGTH -> R.string.total_length
-        }
-    }
-
     private fun setNonValueMessage() {
         val binding = binding ?: return
         binding.message.setText(R.string.label_none_value)
@@ -51,15 +43,13 @@ class DetailMeasurementView @JvmOverloads constructor(
     private fun setDifferenceMessage(difference: Double) {
         val binding = binding ?: return
 
-        if (difference == 0.0) {
-            binding.message.setText(R.string.label_suitable)
-            binding.message.setTextColor(ContextCompat.getColor(context, R.color.green))
-        } else if (difference > 0) {
-            binding.message.text = context.getString(R.string.label_lager_than, MeasurementUtil.getAdjustedValue(difference, true))
-            binding.message.setTextColor(ContextCompat.getColor(context, R.color.red))
-        } else {
-            binding.message.text = context.getString(R.string.label_smaller_than, MeasurementUtil.getAdjustedValue(-difference, true))
-            binding.message.setTextColor(ContextCompat.getColor(context, R.color.red))
+        val (message, colorRes) = when {
+            difference == 0.0 -> Pair(context.getString(R.string.label_suitable), R.color.green)
+            difference > 0 -> Pair(context.getString(R.string.label_lager_than, MeasurementUtil.getAdjustedValue(difference, true)), R.color.red)
+            else -> Pair(context.getString(R.string.label_smaller_than, MeasurementUtil.getAdjustedValue(-difference, true)), R.color.red)
         }
+
+        binding.message.text = message
+        binding.message.setTextColor(ContextCompat.getColor(context, colorRes))
     }
 }

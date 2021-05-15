@@ -12,7 +12,7 @@ import com.sork.common.extension.setOnClickListenerWithHaptic
 import com.sork.common.util.MeasurementUtil
 import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
-import com.sork.sork.R
+import com.sork.sork.common.getMeasurementTypeName
 import com.sork.sork.databinding.ViewMeasurementItemBinding
 import com.sork.sork.main.bottomsheet.ruler.ItemPaddingDecoration
 import com.sork.sork.main.bottomsheet.ruler.OnSnapPositionChangeListener
@@ -124,15 +124,6 @@ class MeasurementItemView @JvmOverloads constructor(
         binding.value.text = MeasurementUtil.getAdjustedValue(measurement.value, false)
         binding.checkbox.isChecked = measurement.selected && measurement.value > 0
         binding.checkbox.isEnabled = measurement.value > 0.0 && isEnabled
-    }
-
-    private fun getMeasurementTypeName(type: MeasurementType): Int {
-        return when (type) {
-            MeasurementType.SHOULDER_WIDTH -> R.string.shoulder_width
-            MeasurementType.SLEEVE_LENGTH -> R.string.sleeve_length
-            MeasurementType.BUST_WIDTH -> R.string.bust_width
-            MeasurementType.TOTAL_LENGTH -> R.string.total_length
-        }
     }
 
     fun getMeasurement(): Measurement {

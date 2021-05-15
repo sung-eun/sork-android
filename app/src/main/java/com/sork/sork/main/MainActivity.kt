@@ -18,6 +18,7 @@ import com.sork.domain.entity.MeasurementType
 import com.sork.domain.entity.ProductSummary
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
+import com.sork.sork.common.getMeasurementTypeName
 import com.sork.sork.databinding.ActivityMainBinding
 import com.sork.sork.detail.DetailActivity
 import com.sork.sork.detail.EXTRA_ID
@@ -187,15 +188,6 @@ class MainActivity : AppCompatActivity() {
         val binding = binding ?: return
         binding.bottomSheetBinding.guideBinding.root.visibility = View.GONE
         binding.bottomSheetBinding.buttonGroup.visibility = View.VISIBLE
-    }
-
-    private fun getMeasurementTypeName(type: MeasurementType): Int {
-        return when (type) {
-            MeasurementType.SHOULDER_WIDTH -> R.string.shoulder_width
-            MeasurementType.SLEEVE_LENGTH -> R.string.sleeve_length
-            MeasurementType.BUST_WIDTH -> R.string.bust_width
-            MeasurementType.TOTAL_LENGTH -> R.string.total_length
-        }
     }
 
     private fun getMeasurementTypeDescription(type: MeasurementType): Int {

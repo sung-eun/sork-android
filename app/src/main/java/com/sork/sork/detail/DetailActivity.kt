@@ -29,7 +29,8 @@ const val EXTRA_ID = "com.sork.sork.detail.EXTRA_ID"
 
 class DetailActivity : AppCompatActivity() {
     private var binding: ActivityDetailBinding? = null
-    private var viewModel: DetailViewModel? = null
+
+    private lateinit var viewModel: DetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,46 +57,42 @@ class DetailActivity : AppCompatActivity() {
             )
         ).get(DetailViewModel::class.java)
 
-        viewModel?.let {
-            it.measurements.observe(this, { measurements ->
-                if (measurements == null || it.product.value == null) return@observe
-                bindMeasurements(measurements, it.product.value!!)
-            })
-
-            it.product.observe(this, { product ->
-                if (product == null) return@observe
-                bindProduct(product)
-                if (it.measurements.value != null) {
-                    bindMeasurements(it.measurements.value!!, product)
-                }
-            })
-
-            it.loading.observe(this, { show ->
-                if (show == null) return@observe
-                setProgress(show)
-            })
-
-            it.error.observe(this, { throwable ->
-                if (throwable == null) return@observe
-                throwable.printStackTrace()
-            })
-        }
+        viewModel.measurements.observe(this, { updateMeasurements(it) })
+        viewModel.product.observe(this, { updateProduct(it) })
+        viewModel.loading.observe(this, { setProgress(it) })
+        viewModel.error.observe(this, { /*Do Nothing*/ })
 
         val id = intent.getStringExtra(EXTRA_ID)
         if (id.isNullOrEmpty()) {
             finish()
             return
         }
-        viewModel?.loadInitialData(id)
+
+        viewModel.loadInitialData(id)
     }
 
     private fun initViews() {
         val binding = binding ?: return
         binding.backButton.setOnClickListenerWithHaptic { finish() }
         binding.purchaseButton.setOnClickListenerWithHaptic {
-            viewModel?.product?.value?.let {
+            viewModel.product.value?.let {
                 launchWebBrowser(it.purchaseUrl)
             }
+        }
+    }
+
+    private fun updateMeasurements(measurements: Map<MeasurementType, Measurement>?) {
+        if (measurements.isNullOrEmpty()) return
+        viewModel.product.value?.let {
+            bindMeasurements(measurements, it)
+        }
+    }
+
+    private fun updateProduct(product: Product?) {
+        if (product == null) return
+        bindProduct(product)
+        viewModel.measurements.value?.let {
+            bindMeasurements(it, product)
         }
     }
 

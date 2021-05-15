@@ -20,7 +20,7 @@ class DetailViewModel(
 
     val measurements: MutableLiveData<Map<MeasurementType, Measurement>> = MutableLiveData()
     val product: MutableLiveData<Product> = MutableLiveData()
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
+    val loading: MutableLiveData<Boolean> = MutableLiveData(false)
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
     fun loadInitialData(id: String) {

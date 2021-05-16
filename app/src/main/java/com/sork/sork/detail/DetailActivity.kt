@@ -5,32 +5,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.sork.common.extension.setOnClickListenerWithHaptic
-import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
-import com.sork.data.datasource.remote.ProductDetailRemoteDataSourceImpl
-import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
-import com.sork.data.datasource.remote.api.ApiFactory
-import com.sork.data.repository.MeasurementRepositoryImpl
-import com.sork.data.repository.ProductDetailRepositoryImpl
 import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.MeasurementType
 import com.sork.domain.entity.Product
-import com.sork.domain.usecase.MeasurementUseCase
-import com.sork.domain.usecase.ProductDetailUseCase
 import com.sork.sork.R
 import com.sork.sork.databinding.ActivityDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
 const val EXTRA_ID = "com.sork.sork.detail.EXTRA_ID"
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
     private var binding: ActivityDetailBinding? = null
 
-    private lateinit var viewModel: DetailViewModel
+    private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,20 +37,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        val productApi = ApiFactory.getProductApi(this)
-        viewModel = ViewModelProvider(
-            this,
-            DetailViewModelFactory(
-                MeasurementUseCase(
-                    MeasurementRepositoryImpl(
-                        MeasurementLocalDataSourceImpl(this),
-                        ProductSummaryRemoteDataSourceImpl(productApi)
-                    )
-                ),
-                ProductDetailUseCase(ProductDetailRepositoryImpl(ProductDetailRemoteDataSourceImpl(productApi)))
-            )
-        ).get(DetailViewModel::class.java)
-
         viewModel.measurements.observe(this, { updateMeasurements(it) })
         viewModel.product.observe(this, { updateProduct(it) })
         viewModel.loading.observe(this, { setProgress(it) })

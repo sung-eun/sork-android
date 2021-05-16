@@ -4,19 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sork.common.extension.setOnClickListenerWithHaptic
 import com.sork.common.util.MeasurementUtil
-import com.sork.data.datasource.local.MeasurementLocalDataSourceImpl
-import com.sork.data.datasource.remote.ProductSummaryRemoteDataSourceImpl
-import com.sork.data.datasource.remote.api.ApiFactory
-import com.sork.data.repository.MeasurementRepositoryImpl
 import com.sork.domain.entity.MeasurementType
 import com.sork.domain.entity.ProductSummary
-import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.R
 import com.sork.sork.common.getMeasurementTypeName
 import com.sork.sork.databinding.ActivityMainBinding
@@ -24,12 +19,14 @@ import com.sork.sork.detail.DetailActivity
 import com.sork.sork.detail.EXTRA_ID
 import com.sork.sork.main.bottomsheet.measurement.GuideListener
 import com.sork.sork.main.model.MeasurementParam
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,17 +42,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(
-            this,
-            MainViewModelFactory(
-                MeasurementUseCase(
-                    MeasurementRepositoryImpl(
-                        MeasurementLocalDataSourceImpl(this),
-                        ProductSummaryRemoteDataSourceImpl(ApiFactory.getProductApi(this))
-                    )
-                )
-            )
-        ).get(MainViewModel::class.java)
+//        viewModel = ViewModelProvider(
+//            this,
+//            MainViewModelFactory(
+//                MeasurementUseCase(
+//                    MeasurementRepositoryImpl(
+//                        MeasurementLocalDataSourceImpl(this),
+//                        ProductSummaryRemoteDataSourceImpl(ApiFactory.getProductApi(this))
+//                    )
+//                )
+//            )
+//        ).get(MainViewModel::class.java)
 
         viewModel.productSummaries.observe(this, { updateProductSummaries(it) })
         viewModel.measurementParam.observe(this, { setBottomSheetMeasurement(it) })

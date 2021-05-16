@@ -8,11 +8,14 @@ import com.sork.domain.entity.MeasurementType
 import com.sork.domain.entity.Product
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.domain.usecase.ProductDetailUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import javax.inject.Inject
 
-class DetailViewModel(
+@HiltViewModel
+class DetailViewModel @Inject constructor(
     private val measurementUseCase: MeasurementUseCase,
     private val productDetailUseCase: ProductDetailUseCase
 ) : ViewModel() {

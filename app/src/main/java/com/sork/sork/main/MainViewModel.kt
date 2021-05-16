@@ -7,13 +7,16 @@ import com.sork.domain.entity.Measurement
 import com.sork.domain.entity.ProductSummary
 import com.sork.domain.usecase.MeasurementUseCase
 import com.sork.sork.main.model.MeasurementParam
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import javax.inject.Inject
 
-class MainViewModel(private val measurementUseCase: MeasurementUseCase) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val measurementUseCase: MeasurementUseCase) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     val measurementParam: MutableLiveData<MeasurementParam> = MutableLiveData()
